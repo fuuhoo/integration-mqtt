@@ -1,0 +1,24 @@
+{
+  "groups": [
+    {
+      "name": "mqtt",
+      "type": "cn.siwei.fubin.mqtt.starter.config.MqttProperties",
+      "sourceType": "cn.siwei.fubin.mqtt.starter.config.MqttProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "mqtt.config",
+      "type": "java.util.Map<java.lang.String,cn.siwei.fubin.mqtt.starter.config.MqttProperties$Config>",
+      "description": "所有的配置",
+      "sourceType": "cn.siwei.fubin.mqtt.starter.config.MqttProperties"
+    },
+    {
+      "name": "mqtt.host-address",
+      "type": "java.lang.String",
+      "description": "本机ip作为clientid的后缀",
+      "sourceType": "cn.siwei.fubin.mqtt.starter.config.MqttProperties"
+    }
+  ],
+  "hints": []
+}
