@@ -158,14 +158,15 @@ public class MqttAutoConfiguration implements ApplicationContextAware, BeanPostP
 
 		messageProducerBuilder.addConstructorArgValue(config.getTopics());
 
-//		String payloadType = config.getPayloadType();
-//		if(ObjectUtils.isEmpty(payloadType)){
-//			messageProducerBuilder.addPropertyValue("converter", new DefaultPahoMessageConverter());
-//		}else if("BYTE".equals(payloadType)){
-//			DefaultPahoMessageConverter defaultPahoMessageConverter = new DefaultPahoMessageConverter();
-//			defaultPahoMessageConverter.setPayloadAsBytes(true);
-//			messageProducerBuilder.addPropertyValue("converter", defaultPahoMessageConverter);
-//		}
+		//这段不能注释，要不拿不到payload的类型
+		String payloadType = config.getPayloadType();
+		if(ObjectUtils.isEmpty(payloadType)){
+			messageProducerBuilder.addPropertyValue("converter", new DefaultPahoMessageConverter());
+		}else if("BYTE".equals(payloadType)){
+			DefaultPahoMessageConverter defaultPahoMessageConverter = new DefaultPahoMessageConverter();
+			defaultPahoMessageConverter.setPayloadAsBytes(true);
+			messageProducerBuilder.addPropertyValue("converter", defaultPahoMessageConverter);
+		}
 
 		messageProducerBuilder.addPropertyValue("qos", config.getQos());
 		messageProducerBuilder.addPropertyValue("outputChannel", mqttChannel);
