@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sw-intergration-mqtt-starter</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.5-SNAPSHOT</version>
     <packaging>jar</packaging>
     <dependencies>
 
@@ -50,7 +50,6 @@
             <artifactId>spring-kafka</artifactId>
             <version>2.3.9.RELEASE</version>
         </dependency>
-
 
 
     </dependencies>

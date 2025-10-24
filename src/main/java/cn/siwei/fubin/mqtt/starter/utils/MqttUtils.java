@@ -213,6 +213,7 @@ public class MqttUtils {
                 }
             }
         }
+
     }
 
     public static void dispatchSendMessage(Message<?> mqttMessage) {
@@ -234,6 +235,10 @@ public class MqttUtils {
      * @return
      */
     private static MyMqttv5PahoMessageHandler getDefaultV5Handler() {
+
+
+
+
         return defaultMqttv5PahoMessageHandler;
     }
 
@@ -246,6 +251,7 @@ public class MqttUtils {
 
     public static MqttPahoMessageHandler getHandler(String channelName) {
         MqttPahoMessageHandler handler = HANDLER_MAP.get(channelName + CHANNEL_NAME_SUFFIX);
+
 
         if (handler == null) {
             log.error("未查询到相应通道{}的handler，存在的通道名称{}", channelName, HANDLER_MAP.keySet());
@@ -265,12 +271,12 @@ public class MqttUtils {
     }
 
 
-    public static MqttPahoMessageDrivenChannelAdapter getMqttAdapter(String channelName) {
+    public static MqttPahoMessageDrivenChannelAdapter getComsumerMqttAdapter(String channelName) {
         MqttPahoMessageDrivenChannelAdapter adapter = ADAPTER_MAP_COMSUMER.get(channelName + CHANNEL_NAME_COMSUMER_SUFFIX);
         return adapter;
     }
 
-    public static MqttPahoMessageDrivenChannelAdapter getMqttAdapter() {
+    public static MqttPahoMessageDrivenChannelAdapter getComsumerMqttAdapter() {
 
         return defaultAdapter;
     }
