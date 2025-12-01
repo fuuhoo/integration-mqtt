@@ -166,15 +166,16 @@ public class MqttUtils {
      * v5版本的发送，支持添加meta数据
     */
     public static void sendV5Message(String topic, byte[] message, int qos,Map<String,String> userProperties) {
-
-
         MessageBuilder<byte[]> stringMessageBuilder = MessageBuilder.withPayload(message)
                 .setHeader(MqttHeaders.TOPIC, topic)
                 .setHeader(MqttHeaders.QOS, qos);
 
-        for (String s : userProperties.keySet()) {
-            stringMessageBuilder.setHeader(USER_PROPERTIES+s, userProperties.get(s));
+        if(userProperties != null) {
+            for (String s : userProperties.keySet()) {
+                stringMessageBuilder.setHeader(USER_PROPERTIES+s, userProperties.get(s));
+            }
         }
+
         Message<byte[]> mqttMessage = stringMessageBuilder.build();
         dispatchSendMessage(mqttMessage);
     }
@@ -184,8 +185,10 @@ public class MqttUtils {
                 .setHeader(MqttHeaders.TOPIC, topic)
                 .setHeader(MqttHeaders.QOS, qos);
 
-        for (String s : userProperties.keySet()) {
-            stringMessageBuilder.setHeader(USER_PROPERTIES+s, userProperties.get(s));
+        if(userProperties != null) {
+            for (String s : userProperties.keySet()) {
+                stringMessageBuilder.setHeader(USER_PROPERTIES+s, userProperties.get(s));
+            }
         }
         Message<String> mqttMessage = stringMessageBuilder.build();
         dispatchSendMessage(mqttMessage);
@@ -195,8 +198,10 @@ public class MqttUtils {
         MessageBuilder<byte[]> stringMessageBuilder = MessageBuilder.withPayload(message)
                 .setHeader(MqttHeaders.TOPIC, topic)
                 .setHeader(MqttHeaders.QOS, qos);
-        for (String s : userProperties.keySet()) {
-            stringMessageBuilder.setHeader(USER_PROPERTIES+s, userProperties.get(s));
+        if(userProperties != null) {
+            for (String s : userProperties.keySet()) {
+                stringMessageBuilder.setHeader(USER_PROPERTIES+s, userProperties.get(s));
+            }
         }
         Message<byte[]> mqttMessage = stringMessageBuilder.build();
         dispatchSendMessage(mqttMessage,channelName);
@@ -205,10 +210,11 @@ public class MqttUtils {
     public static void sendV5Message(String topic, String message, int qos,String channelName,Map<String,String> userProperties) {
         MessageBuilder<String> stringMessageBuilder = MessageBuilder.withPayload(message)
                 .setHeader(MqttHeaders.TOPIC, topic)
-
                 .setHeader(MqttHeaders.QOS, qos);
-        for (String s : userProperties.keySet()) {
-            stringMessageBuilder.setHeader(USER_PROPERTIES+s, userProperties.get(s));
+        if(userProperties != null) {
+            for (String s : userProperties.keySet()) {
+                stringMessageBuilder.setHeader(USER_PROPERTIES+s, userProperties.get(s));
+            }
         }
 
         Message<String> mqttMessage = stringMessageBuilder.build();
