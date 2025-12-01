@@ -2,6 +2,9 @@ package cn.siwei.fubin.mqtt.starter.utils;
 
 import cn.siwei.fubin.mqtt.starter.handler.MyMqttv5PahoMessageHandler;
 import lombok.extern.log4j.Log4j2;
+import org.eclipse.paho.mqttv5.common.MqttMessage;
+import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
+import org.springframework.integration.mapping.HeaderMapper;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.inbound.Mqttv5PahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.outbound.AbstractMqttMessageHandler;
@@ -43,6 +46,8 @@ public class MqttUtils {
 
     public final static String CHANNEL_NAME_SUFFIX = "MqttPahoMessageHandler";
     public final static String CHANNEL_NAME_COMSUMER_SUFFIX = "ConsumerMqttPahoMessageHandler";
+
+    public final static String USER_PROPERTIES ="mqtt_userProperty_";
 
     /**
      * 存放handler
@@ -136,8 +141,6 @@ public class MqttUtils {
         dispatchSendMessage(mqttMessage, channelName);
     }
 
-
-
     /**
      * 如果只有一个通道将使用该通道发送消息
      *
@@ -155,6 +158,61 @@ public class MqttUtils {
         Message<String> mqttMessage = MessageBuilder.withPayload(message).setHeader(MqttHeaders.TOPIC, topic)
                 .setHeader(MqttHeaders.QOS, qos).build();
         dispatchSendMessage(mqttMessage);
+    }
+
+
+
+    /**
+     * v5版本的发送，支持添加meta数据
+    */
+    public static void sendV5Message(String topic, byte[] message, int qos,Map<String,String> userProperties) {
+
+
+        MessageBuilder<byte[]> stringMessageBuilder = MessageBuilder.withPayload(message)
+                .setHeader(MqttHeaders.TOPIC, topic)
+                .setHeader(MqttHeaders.QOS, qos);
+
+        for (String s : userProperties.keySet()) {
+            stringMessageBuilder.setHeader(USER_PROPERTIES+s, userProperties.get(s));
+        }
+        Message<byte[]> mqttMessage = stringMessageBuilder.build();
+        dispatchSendMessage(mqttMessage);
+    }
+
+    public static void sendV5Message(String topic, String message, int qos,Map<String,String> userProperties) {
+        MessageBuilder<String> stringMessageBuilder = MessageBuilder.withPayload(message)
+                .setHeader(MqttHeaders.TOPIC, topic)
+                .setHeader(MqttHeaders.QOS, qos);
+
+        for (String s : userProperties.keySet()) {
+            stringMessageBuilder.setHeader(USER_PROPERTIES+s, userProperties.get(s));
+        }
+        Message<String> mqttMessage = stringMessageBuilder.build();
+        dispatchSendMessage(mqttMessage);
+    }
+
+    public static void sendV5Message(String topic, byte[] message, int qos,String channelName,Map<String,String> userProperties) {
+        MessageBuilder<byte[]> stringMessageBuilder = MessageBuilder.withPayload(message)
+                .setHeader(MqttHeaders.TOPIC, topic)
+                .setHeader(MqttHeaders.QOS, qos);
+        for (String s : userProperties.keySet()) {
+            stringMessageBuilder.setHeader(USER_PROPERTIES+s, userProperties.get(s));
+        }
+        Message<byte[]> mqttMessage = stringMessageBuilder.build();
+        dispatchSendMessage(mqttMessage,channelName);
+    }
+
+    public static void sendV5Message(String topic, String message, int qos,String channelName,Map<String,String> userProperties) {
+        MessageBuilder<String> stringMessageBuilder = MessageBuilder.withPayload(message)
+                .setHeader(MqttHeaders.TOPIC, topic)
+
+                .setHeader(MqttHeaders.QOS, qos);
+        for (String s : userProperties.keySet()) {
+            stringMessageBuilder.setHeader(USER_PROPERTIES+s, userProperties.get(s));
+        }
+
+        Message<String> mqttMessage = stringMessageBuilder.build();
+        dispatchSendMessage(mqttMessage,channelName);
     }
 
     /**
@@ -185,8 +243,6 @@ public class MqttUtils {
     }
 
 
-
-
     public static void dispatchSendMessage(Message<?> mqttMessage, String channelName) {
         if (ObjectUtils.isEmpty(channelName)) {
             AbstractMqttMessageHandler handler = getDefaultHandler();
@@ -194,6 +250,7 @@ public class MqttUtils {
                 handler.handleMessage(mqttMessage);
             } else {
                 MyMqttv5PahoMessageHandler v5Handler = getDefaultV5Handler();
+                //v5版本
                 if (!ObjectUtils.isEmpty(v5Handler)) {
                     v5Handler.handleMessage(mqttMessage);
                 } else {
@@ -205,6 +262,7 @@ public class MqttUtils {
             if (!ObjectUtils.isEmpty(handler)) {
                 handler.handleMessage(mqttMessage);
             } else {
+                //v5版本
                 MyMqttv5PahoMessageHandler v5Handler = getV5Handler(channelName);
                 if(!ObjectUtils.isEmpty(v5Handler)) {
                     v5Handler.handleMessage(mqttMessage);

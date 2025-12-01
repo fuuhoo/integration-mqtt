@@ -3,6 +3,7 @@ package cn.siwei.fubin.mqtt.starter.config;
 
 import cn.siwei.fubin.mqtt.starter.MqttPahoClientFactorySetting;
 import cn.siwei.fubin.mqtt.starter.MqttPahoClientFactorySettingCallback;
+import cn.siwei.fubin.mqtt.starter.handler.MyMqttHeaderMapper;
 import cn.siwei.fubin.mqtt.starter.handler.MyMqttv5PahoMessageHandler;
 import cn.siwei.fubin.mqtt.starter.utils.MqttUtils;
 import lombok.extern.log4j.Log4j2;
@@ -25,11 +26,14 @@ import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannel
 import org.springframework.integration.mqtt.inbound.Mqttv5PahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
+import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.MessageChannel;
 import cn.siwei.fubin.mqtt.starter.config.MqttProperties.Config;
 import org.springframework.messaging.converter.ProtobufMessageConverter;
+import org.springframework.messaging.support.HeaderMapper;
 import org.springframework.util.ObjectUtils;
 
+import org.springframework.integration.mqtt.support.MqttHeaderMapper;
 
 /**
  * <p>
@@ -120,6 +124,15 @@ public class MqttAutoConfiguration implements ApplicationContextAware, BeanPostP
 				String handlerBeanName = channelName + MqttUtils.CHANNEL_NAME_SUFFIX;
 				beanFactory.registerBeanDefinition(handlerBeanName, mqttOutboundV5(channelName, config));
 				MyMqttv5PahoMessageHandler bean = beanFactory.getBean(handlerBeanName, MyMqttv5PahoMessageHandler.class);
+
+
+				// 创建并设置 HeaderMapper
+				MyMqttHeaderMapper headerMapper = new MyMqttHeaderMapper();
+				headerMapper.setOutboundHeaderNames(
+						"mqtt_userProperty_*"
+				);
+				headerMapper.setInboundHeaderNames("*");
+				bean.setHeaderMapper(headerMapper);
 				MqttUtils.putv5(channelName, bean);
 			}
 		}
@@ -200,7 +213,7 @@ public class MqttAutoConfiguration implements ApplicationContextAware, BeanPostP
 		messageProducerBuilder.addConstructorArgValue(config.getConsumerClientId());
 
 		messageProducerBuilder.addConstructorArgValue(config.getTopics());
-		String payloadType = config.getPayloadType();
+//		String payloadType = config.getPayloadType();
 
 //		if(ObjectUtils.isEmpty(payloadType)){
 //			messageProducerBuilder.addPropertyValue("converter", new DefaultPahoMessageConverter());
@@ -209,6 +222,8 @@ public class MqttAutoConfiguration implements ApplicationContextAware, BeanPostP
 //			defaultPahoMessageConverter.setPayloadAsBytes(true);
 //			messageProducerBuilder.addPropertyValue("converter", defaultPahoMessageConverter);
 //		}
+
+
 		messageProducerBuilder.addPropertyValue("qos", config.getQos());
 		messageProducerBuilder.addPropertyValue("outputChannel", mqttChannel);
 		return messageProducerBuilder.getBeanDefinition();
@@ -244,6 +259,22 @@ public class MqttAutoConfiguration implements ApplicationContextAware, BeanPostP
 
 		builder.addPropertyValue("async", config.getAsync());
 		builder.addPropertyValue("asyncEvents", config.getAsync());
+//		// 创建DefaultMqttHeaderMapper的Bean定义
+//		BeanDefinitionBuilder headerMapperBuilder = BeanDefinitionBuilder
+//				.genericBeanDefinition(DefaultMqttHeaderMapper.class)
+//				.addPropertyValue("outboundHeaderNames", new String[]{
+//						MqttHeaders.TOPIC,
+//						MqttHeaders.QOS,
+//						MqttHeaders.RETAINED,
+//						"mqtt_userProperties", // 必须包含这个
+//						"mqtt_messageExpiryInterval",
+//						"mqtt_responseTopic",
+//						"mqtt_correlationData",
+//						"mqtt_contentType",
+//						"mqtt_userProperty_*" // 如果你也想支持前缀方式
+//				});
+//		// 将HeaderMapper的Bean定义注册到当前handler的Bean定义中
+//		builder.addPropertyValue("headerMapper", headerMapperBuilder.getBeanDefinition());
 
 		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
 		return beanDefinition;
