@@ -1,0 +1,11 @@
+H:\project_self\endpoint\sw-intergration-mqtt-starter\src\main\java\cn\siwei\fubin\mqtt\starter\config\MqttProperties.java
+H:\project_self\endpoint\sw-intergration-mqtt-starter\src\main\java\cn\siwei\fubin\mqtt\starter\MqttPahoClientFactorySettingCallback.java
+H:\project_self\endpoint\sw-intergration-mqtt-starter\src\main\java\cn\siwei\fubin\mqtt\starter\config\MqttAutoConfiguration.java
+H:\project_self\endpoint\sw-intergration-mqtt-starter\src\main\java\cn\siwei\fubin\mqtt\starter\utils\MqttUtils.java
+H:\project_self\endpoint\sw-intergration-mqtt-starter\src\main\java\cn\siwei\fubin\mqtt\starter\handler\MyMqttHeaderMapper.java
+H:\project_self\endpoint\sw-intergration-mqtt-starter\src\main\java\cn\siwei\fubin\mqtt\starter\MqttPahoClientFactorySetting.java
+H:\project_self\endpoint\sw-intergration-mqtt-starter\src\main\java\cn\siwei\fubin\mqtt\starter\listener\MqttEventListener.java
+H:\project_self\endpoint\sw-intergration-mqtt-starter\src\main\java\cn\siwei\fubin\mqtt\starter\config\MqttCallBack.java
+H:\project_self\endpoint\sw-intergration-mqtt-starter\src\main\java\org\springframework\integration\mqtt\inbound\Mqttv5PahoMessageDrivenChannelAdapter.java
+H:\project_self\endpoint\sw-intergration-mqtt-starter\src\main\java\cn\siwei\fubin\mqtt\starter\handler\MyMqttv5PahoMessageHandler.java
+H:\project_self\endpoint\sw-intergration-mqtt-starter\src\main\java\cn\siwei\fubin\mqtt\starter\adapter\MyMqttv5PahoMessageDrivenChannelAdapter.java
