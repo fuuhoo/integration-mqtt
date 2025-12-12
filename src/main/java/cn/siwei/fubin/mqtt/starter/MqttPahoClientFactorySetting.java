@@ -101,21 +101,19 @@ public class MqttPahoClientFactorySetting {
 		options.setServerURIs(config.getUrl());
 		options.setUserName(config.getUsername());
 		options.setPassword(config.getPassword().getBytes());
-		options.setAutomaticReconnect(true);
-		options.setCleanStart(false);
 //		// 配置 最大传输中数，默认值10，qos!=0 时生效
 //		//表示允许同时在传输中的最大消息数量。
 //		// MQTT 协议规定，在未收到 ACK 确认之前，客户端只能同时传输一定数量的消息。
 //		// MaxInflight 指标用来控制该数量，以避免网络拥塞
-//		options.setReceiveMaximum(config.getMaxInflight()==null?1000:config.getMaxInflight());
-//		options.setAutomaticReconnectDelay(config.getAutomaticReconnectMinDelay(),config.getAutomaticReconnectMaxDelay());
-//		options.setKeepAliveInterval(config.getKepAliveInterval());
-//		Boolean reconnect = config.getAutomaticReconnect() == null ? true : config.getAutomaticReconnect();
-//		options.setAutomaticReconnect(reconnect);
-//		options.setCleanStart(config.getCleanStart() == null ? true : config.getCleanStart());
-//
+		options.setReceiveMaximum(config.getMaxInflight()==null?1000:config.getMaxInflight());
+		options.setAutomaticReconnectDelay(config.getAutomaticReconnectMinDelay(),config.getAutomaticReconnectMaxDelay());
+		options.setKeepAliveInterval(config.getKepAliveInterval());
+		Boolean reconnect = config.getAutomaticReconnect() == null ? true : config.getAutomaticReconnect();
+		options.setAutomaticReconnect(reconnect);
+		options.setCleanStart(config.getCleanStart() == null ? true : config.getCleanStart());
+
 		options.setSessionExpiryInterval(config.getSessionExpiryInterval());
-//		options.setConnectionTimeout(config.getTimeout());
+		options.setConnectionTimeout(config.getTimeout());
 //
 //		Will will = null;
 //		if (isConsumer && config.getConsumerWill() != null) {

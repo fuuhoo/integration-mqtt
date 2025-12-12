@@ -26,14 +26,11 @@ import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannel
 import org.springframework.integration.mqtt.inbound.Mqttv5PahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
-import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.MessageChannel;
 import cn.siwei.fubin.mqtt.starter.config.MqttProperties.Config;
-import org.springframework.messaging.converter.ProtobufMessageConverter;
-import org.springframework.messaging.support.HeaderMapper;
+import org.springframework.messaging.converter.ByteArrayMessageConverter;
+import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.util.ObjectUtils;
-
-import org.springframework.integration.mqtt.support.MqttHeaderMapper;
 
 /**
  * <p>
@@ -83,7 +80,7 @@ public class MqttAutoConfiguration implements ApplicationContextAware, BeanPostP
 			if (!Boolean.FALSE.equals(config.getConsumerEnable())) {
 				// 注册通道信息
 				beanFactory.registerBeanDefinition(channelName, mqttChannel());
-				log.info("初始化mqtt, channel {}, 配置 {} ", channelName, config);
+				log.info("mqtt============>初始化mqtt, channel {}, 配置 {} ", channelName, config);
 				MessageChannel mqttChannel = beanFactory.getBean(channelName, MessageChannel.class);
 				beanFactory.registerBeanDefinition(channelName + "MqttChannelAdapter", channelAdapter(channelName, config, mqttChannel));
 
@@ -110,7 +107,7 @@ public class MqttAutoConfiguration implements ApplicationContextAware, BeanPostP
 			if (!Boolean.FALSE.equals(config.getConsumerEnable())) {
 				// 注册通道信息
 				beanFactory.registerBeanDefinition(channelName, mqttChannel());
-				log.info("初始化mqttV5, channel {}, 配置 {} ", channelName, config);
+				log.info("mqtt============>初始化mqttV5, channel {}, 配置 {} ", channelName, config);
 				MessageChannel mqttChannel = beanFactory.getBean(channelName, MessageChannel.class);
 				//Adapter
 				beanFactory.registerBeanDefinition(channelName + "MqttChannelAdapter", channelAdapterV5(channelName, config, mqttChannel));
@@ -124,7 +121,6 @@ public class MqttAutoConfiguration implements ApplicationContextAware, BeanPostP
 				String handlerBeanName = channelName + MqttUtils.CHANNEL_NAME_SUFFIX;
 				beanFactory.registerBeanDefinition(handlerBeanName, mqttOutboundV5(channelName, config));
 				MyMqttv5PahoMessageHandler bean = beanFactory.getBean(handlerBeanName, MyMqttv5PahoMessageHandler.class);
-
 
 				// 创建并设置 HeaderMapper
 				MyMqttHeaderMapper headerMapper = new MyMqttHeaderMapper();
@@ -213,15 +209,15 @@ public class MqttAutoConfiguration implements ApplicationContextAware, BeanPostP
 		messageProducerBuilder.addConstructorArgValue(config.getConsumerClientId());
 
 		messageProducerBuilder.addConstructorArgValue(config.getTopics());
-//		String payloadType = config.getPayloadType();
+		String payloadType = config.getPayloadType();
 
-//		if(ObjectUtils.isEmpty(payloadType)){
-//			messageProducerBuilder.addPropertyValue("converter", new DefaultPahoMessageConverter());
-//		}else if("BYTE".equals(payloadType)){
-//			DefaultPahoMessageConverter defaultPahoMessageConverter = new DefaultPahoMessageConverter();
+		if(ObjectUtils.isEmpty(payloadType)){
+			messageProducerBuilder.addPropertyValue("converter", new StringMessageConverter());
+		}else if("BYTE".equals(payloadType)){
+			ByteArrayMessageConverter defaultPahoMessageConverter = new ByteArrayMessageConverter();
 //			defaultPahoMessageConverter.setPayloadAsBytes(true);
-//			messageProducerBuilder.addPropertyValue("converter", defaultPahoMessageConverter);
-//		}
+			messageProducerBuilder.addPropertyValue("messageConverter", defaultPahoMessageConverter);
+		}
 
 
 		messageProducerBuilder.addPropertyValue("qos", config.getQos());

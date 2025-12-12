@@ -2,9 +2,7 @@ package cn.siwei.fubin.mqtt.starter.utils;
 
 import cn.siwei.fubin.mqtt.starter.handler.MyMqttv5PahoMessageHandler;
 import lombok.extern.log4j.Log4j2;
-import org.eclipse.paho.mqttv5.common.MqttMessage;
-import org.eclipse.paho.mqttv5.common.packet.MqttProperties;
-import org.springframework.integration.mapping.HeaderMapper;
+import org.springframework.integration.mqtt.inbound.AbstractMqttMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.inbound.Mqttv5PahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.outbound.AbstractMqttMessageHandler;
@@ -340,9 +338,13 @@ public class MqttUtils {
         return adapter;
     }
 
-    public static MqttPahoMessageDrivenChannelAdapter getComsumerMqttAdapter() {
+    public static AbstractMqttMessageDrivenChannelAdapter getComsumerMqttAdapter() {
+        if(defaultAdapter!=null){
+            return defaultAdapter;
+        }else {
+            return getMqttV5Adapter();
+        }
 
-        return defaultAdapter;
     }
 
     public static Mqttv5PahoMessageDrivenChannelAdapter getMqttV5Adapter(String channelName) {
