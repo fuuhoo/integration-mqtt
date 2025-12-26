@@ -2,7 +2,6 @@ package cn.siwei.fubin.mqtt.starter.listener;
 
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttException;
-;
 import org.springframework.context.event.EventListener;
 import org.springframework.integration.mqtt.event.MqttConnectionFailedEvent;
 import org.springframework.stereotype.Component;
