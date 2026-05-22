@@ -5,6 +5,7 @@ import cn.siwei.fubin.mqtt.starter.MqttPahoClientFactorySetting;
 import cn.siwei.fubin.mqtt.starter.MqttPahoClientFactorySettingCallback;
 import cn.siwei.fubin.mqtt.starter.handler.MyMqttHeaderMapper;
 import cn.siwei.fubin.mqtt.starter.handler.MyMqttv5PahoMessageHandler;
+import cn.siwei.fubin.mqtt.starter.listener.MqttEventListener;
 import cn.siwei.fubin.mqtt.starter.utils.MqttUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeansException;
@@ -21,6 +22,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.inbound.Mqttv5PahoMessageDrivenChannelAdapter;
@@ -43,6 +45,7 @@ import org.springframework.util.ObjectUtils;
 @Log4j2
 @Configuration
 @EnableConfigurationProperties(MqttProperties.class)
+@Import({MqttEventListener.class})
 public class MqttAutoConfiguration implements ApplicationContextAware, BeanPostProcessor {
 
 	private ConfigurableApplicationContext applicationContext;

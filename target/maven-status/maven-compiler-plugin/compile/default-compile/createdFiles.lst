@@ -1,7 +1,6 @@
 cn\siwei\fubin\mqtt\starter\MqttPahoClientFactorySetting.class
 org\springframework\integration\mqtt\inbound\Mqttv5PahoMessageDrivenChannelAdapter.class
 cn\siwei\fubin\mqtt\starter\handler\MyMqttHeaderMapper.class
-cn\siwei\fubin\mqtt\starter\config\MqttCallBack.class
 META-INF\spring-configuration-metadata.json
 cn\siwei\fubin\mqtt\starter\handler\MyMqttv5PahoMessageHandler.class
 cn\siwei\fubin\mqtt\starter\config\MqttAutoConfiguration.class
