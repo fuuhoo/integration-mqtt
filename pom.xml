@@ -5,12 +5,18 @@
     <parent>
         <artifactId>endpoint</artifactId>
         <groupId>cn.siwei.fubin</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sw-intergration-mqtt-starter</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <!-- 库层模块：不声明自己的版本，继承根 pom 的 ${revision} -->
     <packaging>jar</packaging>
+
+    <properties>
+        <!-- 库层对外承诺 Java 8 兼容，勿随意提升 -->
+        <java.version>8</java.version>
+    </properties>
     <dependencies>
 
         <dependency>
