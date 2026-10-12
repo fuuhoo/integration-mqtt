@@ -10,7 +10,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sw-intergration-mqtt-starter</artifactId>
-    <!-- 库层模块：不声明自己的版本，继承根 pom 的 ${revision} -->
+    <!--
+      本模块已纳入本仓库 libs 聚合器管理，声明自己的版本号，不再继承 ${revision}。
+      原因：${revision} = 0.1.0-SNAPSHOT 与 Nexus 上已发布的 sw-intergration-mqtt-starter:0.1.0-SNAPSHOT
+      坐标完全相同。留在 reactor 里会让 Maven 同时面对"本地源码模块"和"从 Nexus 拉的同坐标构件"，
+      行为不确定。抬到 0.1.1-SNAPSHOT 后两者不再冲突。
+    -->
+    <version>0.1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -71,14 +77,18 @@
         </resources>
     </build>
 
+    <!--
+      与根 pom、libs/codec-framework 保持一致，统一发到内网 Nexus。
+      原先指向 58.56.207.43:9203，该地址已封禁不可达。
+    -->
     <distributionManagement>
         <repository>
             <id>releases</id>
-            <url>http://58.56.207.43:9203/nexus/content/repositories/releases/</url>
+            <url>http://172.17.4.39:873/nexus/content/repositories/releases/</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
-            <url>http://58.56.207.43:9203/nexus/content/repositories/snapshots/</url>
+            <url>http://172.17.4.39:873/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
